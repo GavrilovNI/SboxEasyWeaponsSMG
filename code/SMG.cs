@@ -7,6 +7,10 @@ using EasyWeapons.Sounds;
 using EasyWeapons.Inventories;
 using EasyWeapons.Weapons.Modules.Reload;
 using EasyWeapons.Recoiles.Modules;
+using EasyWeapons.Effects.Animations.Parameters;
+using EasyWeapons.Effects.Animations;
+using EasyWeapons.Effects;
+using System.Collections.Generic;
 
 namespace EasyWeapons.Demo.Weapons;
 
@@ -36,7 +40,16 @@ public partial class SMG : Weapon
         if(Game.IsServer)
         {
             HoldType = CitizenAnimationHelper.HoldTypes.Rifle;
-            DeployAnimation = "deploy";
+            DeployEffects = new List<WeaponEffect>()
+            {
+                new SoundEffect()
+                {
+                    Side = Networking.NetworkSide.Client,
+                    Sound = new DelayedSound("rust_pistol.deploy")
+                },
+                new OwnerAnimationEffect() { AnimationParameter = AnimationParameter.Of("b_deploy", true) },
+                new ViewModelAnimationEffect() { AnimationParameter = AnimationParameter.Of("deploy", true) }
+            };
             UseOwnerAimRay = true;
             DefaultLocalAimRay = new Ray(new(1.65f, -17.5f, 3.8f), Vector3.Right);
             DeployTime = 0.5f;
@@ -45,8 +58,30 @@ public partial class SMG : Weapon
 
             var attackModule = new SimpleAttackModule(Clip, BulletSpawner, new AutoShootingMode())
             {
-                AttackSound = new DelayedSound("rust_smg.shoot"),
-                DryfireSound = new DelayedSound("rust_smg.dryfire.fixed"),
+                AttackEffects = new List<WeaponEffect>()
+                {
+                    new SoundEffect()
+                    {
+                        Side = Networking.NetworkSide.Server,
+                        Sound = new DelayedSound("rust_smg.shoot")
+                    },
+                    new ParticleEffect()
+                    {
+                        Name = "particles/pistol_muzzleflash.vpcf",
+                        Attachment = "muzzle",
+                        ShouldFollow = false
+                    },
+                    new ViewModelAnimationEffect() { AnimationParameter = AnimationParameter.Of("fire", true) },
+                    new OwnerAnimationEffect() { AnimationParameter = AnimationParameter.Of("b_attack", true) }
+                },
+                DryfireEffects = new List<WeaponEffect>()
+                {
+                    new SoundEffect()
+                    {
+                        Side = Networking.NetworkSide.Server,
+                        Sound = new DelayedSound("rust_smg.dryfire.fixed")
+                    }
+                },
                 FireRate = 15f,
                 Recoil = new RandomRecoil() { XRecoil = new RangedFloat(-1, 1), YRecoil = 3 },
                 NoOwnerRecoilForce = 100000
@@ -55,7 +90,19 @@ public partial class SMG : Weapon
             var reloadModule = new SimpleReloadModule(Clip)
             {
                 ReloadTime = ReloadTime,
-                ReloadFailSound = new DelayedSound("no_ammo"),
+                ReloadEffects = new List<WeaponEffect>()
+                {
+                    new ViewModelAnimationEffect() { AnimationParameter = AnimationParameter.Of("reload", true) },
+                    new OwnerAnimationEffect() { AnimationParameter = AnimationParameter.Of("b_reload", true) }
+                },
+                ReloadFailEffects = new List<WeaponEffect>()
+                {
+                    new SoundEffect()
+                    {
+                        Side = Networking.NetworkSide.Client,
+                        Sound = new DelayedSound("no_ammo")
+                    }
+                }
 
             };
 
