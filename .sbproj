@@ -3,7 +3,7 @@
   "Type": "addon",
   "Org": "doggy",
   "Ident": "ew_smg",
-  "Tags": null,
+  "Tags": "runtime entity weapon easy_weapons",
   "Schema": 1,
   "HasAssets": true,
   "AssetsPath": "",
