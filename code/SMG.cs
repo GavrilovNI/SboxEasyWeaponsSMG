@@ -24,7 +24,7 @@ public partial class SMG : Weapon
 
     public const int DefaultMaxAmmoInClip = 20;
 
-    public const float HitForce = 150f;
+    public const float HitForce = 3f;
     public const float Damage = 7f;
 
     public const float ReloadTime = 4.5f;
