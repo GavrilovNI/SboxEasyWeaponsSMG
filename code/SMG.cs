@@ -10,9 +10,7 @@ using EasyWeapons.Effects.Animations.Parameters;
 using EasyWeapons.Effects.Animations;
 using EasyWeapons.Effects;
 using System.Collections.Generic;
-using EasyWeapons.Bullets.Datas;
 using EasyWeapons.Bullets.Spawners;
-using EasyWeapons.Bullets;
 
 namespace EasyWeapons.Demo.Weapons;
 
@@ -23,9 +21,6 @@ public partial class SMG : Weapon
     public const string DefaultAmmoId = "smg";
 
     public const int DefaultMaxAmmoInClip = 20;
-
-    public const float HitForce = 3f;
-    public const float Damage = 7f;
 
     public const float ReloadTime = 4.5f;
 
@@ -39,18 +34,8 @@ public partial class SMG : Weapon
     [Net, Local]
     protected OneTypeAmmoInventory Clip { get; private set; }
 
-
     public override string ViewModelPath => "weapons/rust_smg/v_rust_smg.vmdl";
 
-    static SMG()
-    {
-        if(Game.IsServer)
-        {
-            var bulletsRegister = BulletsRegister.Instanse;
-            if(bulletsRegister.Contains<InstantTraceBulletData>(DefaultAmmoId) == false)
-                bulletsRegister.Add(DefaultAmmoId, new InstantTraceBulletData() { HitForce = HitForce, Damage = Damage });
-        }
-    }
 
     public SMG()
     {

@@ -1,0 +1,5 @@
+{
+  "BulletEntityName": "TracingBulletEntity",
+  "ModelName": "https://asset.party/facepunch/9mm_bullet",
+  "StartVelocity": 5000
+}
